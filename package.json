@@ -1,0 +1,29 @@
+{
+  "name": "node-latest",
+  "version": "1.0.0",
+  "description": "Checks for the latest Node or NPM version.",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "keywords": [
+    "node",
+    "npm",
+    "version",
+    "latest"
+  ],
+  "main": "index.js",
+  "author": "Mark Tiedemann <www.marktiedemann@gmail.com>",
+  "license": "WTFPL",
+  "dependencies": {
+    "lodash.trim": "^4.3.0",
+    "node-fetch": "^1.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarkTiedemann/node-latest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MarkTiedemann/node-latest/issues"
+  },
+  "homepage": "https://github.com/MarkTiedemann/node-latest"
+}
