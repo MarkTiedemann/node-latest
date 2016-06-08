@@ -9,35 +9,51 @@ __Checks for the lastest Node or NPM version.__
 
 ## Quickstart
 
-**fetch the lastest node or npm version:**
-
 ```javascript
 const { node, npm } = require('node-latest')
 
-node.fetchLatest().then(latest => {
-    console.log('Node: ' + latest) // => v6.1.0
+// get the latest node or npm version
+
+node.latest().then(latest => {
+    console.log('Node: ' + latest) // => 6.2.1
 })
 
-npm.fetchLatest().then(latest => {
-    console.log('NPM: ' + latest) // => v3.8.9
-})
-```
-
-**compare the lastest node or npm version to the currently installed version:**
-
-```javascript
-const { node, npm } = require('node-latest')
-
-node.isLatest().then(isLatest => {
-    console.log(`Is Node up to date?`)
-    console.log(isLatest ? 'Yes': 'No')
-})
-
-npm.isLatest().then(isLatest => {
-    console.log(`Is NPM up to date?`)
-    console.log(isLatest ? 'Yes': 'No')
+npm.latest().then(latest => {
+    console.log('NPM: ' + latest) // => 3.9.5
 })
 ```
+
+## API
+
+**Please note that all methods of this module return a Promise which resolves with a cleaned `semver` version number.**
+
+### `node.latest()`
+
+**\> gets the latest node version**
+
+### `node.lts()`
+
+**\> gets the latest Long Term Support node version**
+
+### `node.current()`
+
+**\> gets the currently installed node version**
+
+### `npm.latest()`
+
+**\> gets the latest npm version**
+
+### `npm.lts()`
+
+**\> gets the latest Long Term Support npm version**
+
+### `npm.next()`
+
+**\> gets the next npm version**
+
+### `npm.current()`
+
+**\> gets the currently installed npm version**
 
 ## License
 

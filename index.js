@@ -1,60 +1,49 @@
 'use strict'
 
 const fetch = require('node-fetch')
-const { exec } = require('child_process')
-const trim = require('lodash.trim')
+const { clean } = require('semver')
+const npm = require('requireg')('npm')
 
-const fetchNodeLatest = () => {
-    return fetch('https://nodejs.org/dist/index.json')
-        .then(res => {
-            if (!res.ok) throw Error(res.statusText)
-            else return res.json()
-        })
-        .then(dists => {
-            return dists[0].version
-        })
-}
+const nodeDist = 'https://nodejs.org/dist/index.json'
+const npmRegistry = 'https://registry.npmjs.com/npm/'
 
-const isNodeLatest = () => {
-    return fetchNodeLatest()
-        .then(version => {
-            return version === process.version
-        })
-}
+const parseJson = res => res.ok ? res.json() : Promise.reject(new Error(res.statusText))
+const fetchJson = url => fetch(url).then(parseJson)
 
-const execVersionPromise = (command) => {
-    return new Promise ((resolve, reject) => {
-        exec(command, (err, version) => {
-            if (err) reject(err)
-            else resolve(trim('v' + version))
-        })
-    })
-}
+/* NODE */
 
-const fetchNpmLatest = () => {
-    return execVersionPromise('npm view npm version')
-}
+const nodeLatest = () =>  fetchJson(nodeDist)
+    .then(dists => clean(dists[0].version))
 
-const fetchNpmCurrent = () => {
-    return execVersionPromise('npm -v')
-}
+const nodeLts = () => fetchJson(nodeDist)
+    .then(dists => clean(dists.find(dist => !!dist.lts).version))
 
-const isNpmLatest = () => {
-    return Promise.all([
-            fetchNpmLatest(),
-            fetchNpmCurrent()
-        ])
-        .then(([latest, current]) => {
-            return latest === current
-        })
-}
+const nodeCurrent = () => Promise.resolve(clean(process.version))
+
+/* NPM */
+
+const npmLatest = () => fetchJson(npmRegistry + 'latest')
+    .then(npm => clean(npm.version))
+
+const npmLts = () => fetchJson(npmRegistry + 'lts')
+    .then(npm => clean(npm.version))
+
+const npmNext = () => fetchJson(npmRegistry + 'next')
+    .then(npm => clean(npm.version))
+
+const npmCurrent = () => Promise.resolve(clean(npm.version))
+
+/* EXPORTS */
 
 module.exports.node = {
-    fetchLatest: fetchNodeLatest,
-    isLatest: isNodeLatest
+    latest: nodeLatest,
+    lts: nodeLts,
+    current: nodeCurrent
 }
 
 module.exports.npm = {
-    fetchLatest: fetchNpmLatest,
-    isLatest: isNpmLatest
+    latest: npmLatest,
+    lts: npmLts,
+    next: npmNext,
+    current: npmCurrent
 }

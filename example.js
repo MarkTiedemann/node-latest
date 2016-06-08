@@ -2,24 +2,30 @@
 
 const { node, npm } = require('.')
 
-node.fetchLatest()
-    .then(latest => console.log('Node: ' + latest))
+node.current()
+    .then(version => console.log('Node current: ' + version))
     .catch(err => console.error(err))
 
-npm.fetchLatest()
-    .then(latest => console.log('NPM: ' + latest))
+node.latest()
+    .then(version => console.log('Node latest: ' + version))
     .catch(err => console.error(err))
 
-node.isLatest()
-    .then(isLatest => {
-        console.log(`Is Node up to date?`)
-        console.log(isLatest ? 'Yes': 'No')
-    })
+node.lts()
+    .then(version => console.log('Node lts: ' + version))
     .catch(err => console.error(err))
 
-npm.isLatest()
-    .then(isLatest => {
-        console.log(`Is NPM up to date?`)
-        console.log(isLatest ? 'Yes': 'No')
-    })
+npm.current()
+    .then(version => console.log('Npm current: ' + version))
+    .catch(err => console.error(err))
+
+npm.latest()
+    .then(version => console.log('Npm latest: ' + version))
+    .catch(err => console.error(err))
+
+npm.lts()
+    .then(version => console.log('Npm lts: ' + version))
+    .catch(err => console.error(err))
+
+npm.next()
+    .then(version => console.log('Npm next: ' + version))
     .catch(err => console.error(err))
