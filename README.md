@@ -1,7 +1,7 @@
 
 # node-latest
 
-__Checks for the lastest Node or NPM version.__
+__Checks for the lastest Node or npm version.__
 
 # Installation
 
@@ -19,41 +19,41 @@ node.latest().then(latest => {
 })
 
 npm.latest().then(latest => {
-    console.log('NPM: ' + latest) // => 3.9.5
+    console.log('npm: ' + latest) // => 3.9.5
 })
 ```
 
 ## API
 
-**Please note that all methods of this module return a Promise which resolves with a cleaned `semver` version number.**
+**Please note that all methods of this module return a Promise which resolves with a cleaned `semver` version number (except the `.current()` methods, which are synchronous).**
 
 ### `node.latest()`
 
-**\> gets the latest node version**
+**\> fetches the latest node version**
 
 ### `node.lts()`
 
-**\> gets the latest Long Term Support node version**
+**\> fetches the latest Long Term Support node version**
 
 ### `node.current()`
 
-**\> gets the currently installed node version**
+**\> returns the currently installed node version**
 
 ### `npm.latest()`
 
-**\> gets the latest npm version**
+**\> fetches the latest npm version**
 
 ### `npm.lts()`
 
-**\> gets the latest Long Term Support npm version**
+**\> fetches the latest Long Term Support npm version**
 
 ### `npm.next()`
 
-**\> gets the next npm version**
+**\> fetches the next npm version**
 
 ### `npm.current()`
 
-**\> gets the currently installed npm version**
+**\> returns the currently installed npm version or `false` if npm is not installed**
 
 ## License
 

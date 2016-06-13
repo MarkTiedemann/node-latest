@@ -2,9 +2,9 @@
 
 const { node, npm } = require('.')
 
-node.current()
-    .then(version => console.log('Node current: ' + version))
-    .catch(err => console.error(err))
+/* NODE */
+
+console.log('Node current: ' + node.current())
 
 node.latest()
     .then(version => console.log('Node latest: ' + version))
@@ -14,18 +14,18 @@ node.lts()
     .then(version => console.log('Node lts: ' + version))
     .catch(err => console.error(err))
 
-npm.current()
-    .then(version => console.log('Npm current: ' + version))
-    .catch(err => console.error(err))
+/* NPM */
+
+console.log('npm current: ' + npm.current())
 
 npm.latest()
-    .then(version => console.log('Npm latest: ' + version))
+    .then(version => console.log('npm latest: ' + version))
     .catch(err => console.error(err))
 
 npm.lts()
-    .then(version => console.log('Npm lts: ' + version))
+    .then(version => console.log('npm lts: ' + version))
     .catch(err => console.error(err))
 
 npm.next()
-    .then(version => console.log('Npm next: ' + version))
+    .then(version => console.log('npm next: ' + version))
     .catch(err => console.error(err))

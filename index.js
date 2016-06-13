@@ -2,7 +2,6 @@
 
 const fetch = require('node-fetch')
 const { clean } = require('semver')
-const npm = require('requireg')('npm')
 
 const nodeDist = 'https://nodejs.org/dist/index.json'
 const npmRegistry = 'https://registry.npmjs.com/npm/'
@@ -18,7 +17,7 @@ const nodeLatest = () =>  fetchJson(nodeDist)
 const nodeLts = () => fetchJson(nodeDist)
     .then(dists => clean(dists.find(dist => !!dist.lts).version))
 
-const nodeCurrent = () => Promise.resolve(clean(process.version))
+const nodeCurrent = () => clean(process.version)
 
 /* NPM */
 
@@ -31,7 +30,14 @@ const npmLts = () => fetchJson(npmRegistry + 'lts')
 const npmNext = () => fetchJson(npmRegistry + 'next')
     .then(npm => clean(npm.version))
 
-const npmCurrent = () => Promise.resolve(clean(npm.version))
+const npmCurrent = () => {
+    try {
+        const npm = require('requireg')('npm')
+        return clean(npm.version)
+    } catch (err) {
+        return false
+    }
+}
 
 /* EXPORTS */
 
