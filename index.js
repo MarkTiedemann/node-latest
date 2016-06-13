@@ -35,7 +35,7 @@ const npmCurrent = () => {
         const npm = require('requireg')('npm')
         return clean(npm.version)
     } catch (err) {
-        return false
+        return NaN
     }
 }
 

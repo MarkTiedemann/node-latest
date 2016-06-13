@@ -53,7 +53,7 @@ npm.latest().then(latest => {
 
 ### `npm.current()`
 
-**\> returns the currently installed npm version or `false` if npm is not installed**
+**\> returns the currently installed npm version or `NaN` if npm is not installed**
 
 ## License
 
