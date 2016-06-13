@@ -1,6 +1,6 @@
 {
   "name": "node-latest",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Checks for the latest Node or npm version.",
   "engines": {
     "node": ">=6.0.0"
