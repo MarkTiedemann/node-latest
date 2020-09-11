@@ -1,55 +1,81 @@
-'use strict'
+const fs = require("fs");
+const path = require("path");
+const https = require("https");
 
-const fetch = require('node-fetch')
-const { clean } = require('semver')
+/* --- NODE --- */
 
-const nodeDist = 'https://nodejs.org/dist/index.json'
-const npmRegistry = 'https://registry.npmjs.com/npm/'
+const NODE_DIST_INDEX = "https://nodejs.org/dist/index.json";
 
-const parseJson = res => res.ok ? res.json() : Promise.reject(new Error(res.statusText))
-const fetchJson = url => fetch(url).then(parseJson)
-
-/* NODE */
-
-const nodeLatest = () =>  fetchJson(nodeDist)
-    .then(dists => clean(dists[0].version))
-
-const nodeLts = () => fetchJson(nodeDist)
-    .then(dists => clean(dists.find(dist => !!dist.lts).version))
-
-const nodeCurrent = () => clean(process.version)
-
-/* NPM */
-
-const npmLatest = () => fetchJson(npmRegistry + 'latest')
-    .then(npm => clean(npm.version))
-
-const npmLts = () => fetchJson(npmRegistry + 'lts')
-    .then(npm => clean(npm.version))
-
-const npmNext = () => fetchJson(npmRegistry + 'next')
-    .then(npm => clean(npm.version))
-
-const npmCurrent = () => {
-    try {
-        const npm = require('requireg')('npm')
-        return clean(npm.version)
-    } catch (err) {
-        return NaN
-    }
+async function node_latest() {
+  let json = await fetch_json(NODE_DIST_INDEX);
+  return strip_v(json[0].version);
 }
 
-/* EXPORTS */
+async function node_lts() {
+  let json = await fetch_json(NODE_DIST_INDEX);
+  return strip_v(json.find((v) => v.lts !== false).version);
+}
 
 module.exports.node = {
-    latest: nodeLatest,
-    lts: nodeLts,
-    current: nodeCurrent
+  current: strip_v(process.version),
+  latest: node_latest,
+  lts: node_lts,
+};
+
+/* --- NPM --- */
+
+async function npm_current() {
+  let json = await read_json(path.join(process.execPath, "../node_modules/npm/package.json"));
+  /**@type {string}*/ let v = json.version;
+  return v;
+}
+
+function npm_fetch_tag(tag) {
+  return async function () {
+    let json = await fetch_json("https://registry.npmjs.com/npm", { accept: "application/vnd.npm.install-v1+json" });
+    /**@type {string}*/ let v = json["dist-tags"][tag];
+    return v;
+  };
 }
 
 module.exports.npm = {
-    latest: npmLatest,
-    lts: npmLts,
-    next: npmNext,
-    current: npmCurrent
+  current: npm_current,
+  latest: npm_fetch_tag("latest"),
+  lts: npm_fetch_tag("lts"),
+  next: npm_fetch_tag("next"),
+};
+
+/* --- UTILS --- */
+
+function strip_v(/**@type {string}*/ s) {
+  return s.slice(1);
+}
+
+function fetch_json(url, headers = {}) {
+  return new Promise((resolve, reject) => {
+    let req = https.get(url, { headers }, async (res) => {
+      try {
+        res.once("error", reject);
+        let buf = [];
+        for await (let chunk of res) buf.push(chunk);
+        resolve(JSON.parse(Buffer.concat(buf).toString("utf-8")));
+      } catch (err) {
+        reject(err);
+      }
+    });
+    req.once("error", reject);
+  });
+}
+
+function read_json(file) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(file, (err, buf) => {
+      if (err) reject(err);
+      else try {
+        resolve(JSON.parse(buf.toString("utf-8")));
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
 }

@@ -1,62 +1,40 @@
 
 # node-latest
 
-__Checks for the lastest Node or npm version.__
+**Determine the lastest Node or npm version.**
 
-# Installation
+## Installation
 
 `npm i -S node-latest`
 
-## Quickstart
+## Example Usage
 
 ```javascript
-const { node, npm } = require('node-latest')
+const { node, npm } = require("node-latest");
 
-// get the latest node or npm version
+async function example() {
+  console.log("node.current:", node.current);
+  console.log("node.latest: ", await node.latest());
+  console.log("node.lts:    ", await node.lts());
+  console.log("npm.current: ", await npm.current());
+  console.log("npm.latest:  ", await npm.latest());
+  console.log("npm.next:    ", await npm.next());
+  console.log("npm.lts:     ", await npm.lts());
+}
 
-node.latest().then(latest => {
-    console.log('Node: ' + latest) // => 6.2.1
-})
+example();
 
-npm.latest().then(latest => {
-    console.log('npm: ' + latest) // => 3.9.5
-})
+/*
+node.current: 14.5.0
+node.latest:  14.10.1
+node.lts:     12.18.3
+npm.current:  6.14.5
+npm.latest:   6.14.8
+npm.next:     6.14.8
+npm.lts:      6.14.8
+*/
 ```
-
-## API
-
-**Please note that all methods of this module return a Promise which resolves with a cleaned `semver` version number (except the `.current()` methods, which are synchronous).**
-
-### `node.latest()`
-
-**\> fetches the latest node version**
-
-### `node.lts()`
-
-**\> fetches the latest Long Term Support node version**
-
-### `node.current()`
-
-**\> returns the currently installed node version**
-
-### `npm.latest()`
-
-**\> fetches the latest npm version**
-
-### `npm.lts()`
-
-**\> fetches the latest Long Term Support npm version**
-
-### `npm.next()`
-
-**\> fetches the next npm version**
-
-### `npm.current()`
-
-**\> returns the currently installed npm version or `NaN` if npm is not installed**
 
 ## License
 
 [WTFPL](http://www.wtfpl.net/) – Do What the F*ck You Want to Public License.
-
-Made with :heart: by [@MarkTiedemann](https://twitter.com/MarkTiedemannDE).

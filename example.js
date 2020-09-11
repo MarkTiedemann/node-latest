@@ -1,31 +1,13 @@
-'use strict'
+const { node, npm } = require("./index.js");
 
-const { node, npm } = require('.')
+async function example() {
+  console.log("node.current:", node.current);
+  console.log("node.latest: ", await node.latest());
+  console.log("node.lts:    ", await node.lts());
+  console.log("npm.current: ", await npm.current());
+  console.log("npm.latest:  ", await npm.latest());
+  console.log("npm.next:    ", await npm.next());
+  console.log("npm.lts:     ", await npm.lts());
+}
 
-/* NODE */
-
-console.log('Node current: ' + node.current())
-
-node.latest()
-    .then(version => console.log('Node latest: ' + version))
-    .catch(err => console.error(err))
-
-node.lts()
-    .then(version => console.log('Node lts: ' + version))
-    .catch(err => console.error(err))
-
-/* NPM */
-
-console.log('npm current: ' + npm.current())
-
-npm.latest()
-    .then(version => console.log('npm latest: ' + version))
-    .catch(err => console.error(err))
-
-npm.lts()
-    .then(version => console.log('npm lts: ' + version))
-    .catch(err => console.error(err))
-
-npm.next()
-    .then(version => console.log('npm next: ' + version))
-    .catch(err => console.error(err))
+example();
