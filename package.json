@@ -1,6 +1,6 @@
 {
   "name": "node-latest",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Determine the lastest Node or npm version.",
   "keywords": [ "node", "npm", "version", "latest", "lts", "next" ],
   "main": "index.js",

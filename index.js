@@ -1,6 +1,5 @@
-const fs = require("fs");
-const path = require("path");
 const https = require("https");
+const child_process = require("child_process");
 
 /* --- NODE --- */
 
@@ -24,10 +23,13 @@ module.exports.node = {
 
 /* --- NPM --- */
 
-async function npm_current() {
-  let json = await read_json(path.join(process.execPath, "../node_modules/npm/package.json"));
-  /**@type {string}*/ let v = json.version;
-  return v;
+function npm_current() {
+  return new Promise((resolve, reject) => {
+    child_process.exec("npm --version", (err, version) => {
+      if (err) reject(err);
+      else resolve(version.trimRight());
+    })
+  });
 }
 
 function npm_fetch_tag(tag) {
@@ -64,18 +66,5 @@ function fetch_json(url, headers = {}) {
       }
     });
     req.once("error", reject);
-  });
-}
-
-function read_json(file) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(file, (err, buf) => {
-      if (err) reject(err);
-      else try {
-        resolve(JSON.parse(buf.toString("utf-8")));
-      } catch (err) {
-        reject(err);
-      }
-    });
   });
 }
